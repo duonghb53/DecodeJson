@@ -1,0 +1,12 @@
+G:\Study\GitHub\DecodeJson\bin\Release\Newtonsoft.Json.dll
+G:\Study\GitHub\DecodeJson\bin\Release\Newtonsoft.Json.xml
+G:\Study\GitHub\DecodeJson\obj\Release\CrawlerData.Form1.resources
+G:\Study\GitHub\DecodeJson\obj\Release\CrawlerData.Properties.Resources.resources
+G:\Study\GitHub\DecodeJson\obj\Release\DecodeJsonFb.csproj.GenerateResource.cache
+G:\Study\GitHub\DecodeJson\obj\Release\DecodeJsonFb.csproj.CoreCompileInputs.cache
+G:\Study\GitHub\DecodeJson\obj\Release\DecodeJsonFb.csproj.CopyComplete
+G:\Study\GitHub\DecodeJson\bin\Release\DecodeJsonFb.exe.config
+G:\Study\GitHub\DecodeJson\bin\Release\DecodeJsonFb.exe
+G:\Study\GitHub\DecodeJson\bin\Release\DecodeJsonFb.pdb
+G:\Study\GitHub\DecodeJson\obj\Release\DecodeJsonFb.exe
+G:\Study\GitHub\DecodeJson\obj\Release\DecodeJsonFb.pdb

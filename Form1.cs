@@ -15,24 +15,24 @@ namespace CrawlerData
 {
     public partial class Form1 : Form
     {
-        //private const string WEB_URL = @"https://vnexpress.net/suc-khoe/dau-lung-nen-nam-nem-cung-hay-mem-3944694.html";
-        private const string WEB_URL = @"https://dantri.com.vn/suc-khoe/nguoi-nha-benh-nhan-say-xin-dam-vao-mat-nu-bac-si-20190627112323245.htm";
-        //private const string WEB_URL = @"https://vnexpress.net/suc-khoe/be-trai-2-tuoi-bi-suy-dinh-duong-vi-tac-ta-trang-3945669.html";
-        private const string PATTERN_DANTRI = @"<p>(?<title>[^<]*)<\/[pP]>";
-
-
         public Form1()
         {
             InitializeComponent();
         }
 
+        public class infoChat
+        {
+            public string sender_name;
+            public string content;
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
-
+            textBox1.Text = String.Empty;
             try
             {
-                string result = String.Empty;
-                var data = new List<string>();
+                List<string> dataContent = new List<string>();
+                var data = new List<infoChat>();
 
                 List<string> listFile = GetAllFileJson(textBox2.Text);
                 string folderRoot = System.IO.Directory.GetCurrentDirectory();
@@ -57,23 +57,48 @@ namespace CrawlerData
                         dynamic oJson = JsonConvert.DeserializeObject(json);
                         foreach (var chat in oJson.messages)
                         {
+                            infoChat info = new infoChat();
                             if (chat.content == null) continue;
-                            data.Add(chat.content.ToString());
+                            info.sender_name = chat.sender_name.ToString();
+                            info.content = chat.content.ToString();
+                            data.Add(info);
                         }
                         r.Close();
                     }
 
                     //Decode
-                    foreach (string line in data)
+                    string senderPrev = string.Empty;
+                    string content = string.Empty;
+                    bool flag = false;
+                    foreach (infoChat line in data)
                     {
-                        string output = line.Replace("\'\"", String.Empty);
-                        output = output.Replace("\"\'", String.Empty);
-                        result += DecodeString(output) + Environment.NewLine;
+                        string sender_name = DecodeString(line.sender_name);
+                        if (sender_name.Equals(senderPrev))
+                        {
+                            content += " " + DecodeString(line.content);
+                            senderPrev = sender_name;
+                            flag = true;
+                            continue;
+                        }
+                        else
+                        {
+                            if (flag)
+                            {
+                                dataContent.Add(content);
+                                flag = false;
+                            }
+                            content = DecodeString(line.content);
+                            senderPrev = sender_name;
+                        }
                     }
                     string fileOut = folderOutput + "\\" + dirName + ".txt";
+                    //FileStream fs = new FileStream(fileOut, FileMode.Create);//Tạo file mới tên là test.txt 
                     using (StreamWriter output = new StreamWriter(fileOut))
                     {
-                        output.WriteLine(result);
+                        for (int i = dataContent.Count - 1; i >= 0; i--)
+                        {
+                            output.WriteLine(dataContent[i]);
+                        }
                         output.Close();
                     }
                     textBox1.AppendText(fileJson + Environment.NewLine);
@@ -97,7 +122,6 @@ namespace CrawlerData
             if (result == DialogResult.OK)
             {
                 textBox2.Text = folderDlg.SelectedPath;
-                //Environment.SpecialFolder root = folderDlg.RootFolder;
             }
         }
 
@@ -113,6 +137,7 @@ namespace CrawlerData
             List<string> listFolder = new List<string>();
             List<string> listFile = new List<string>();
             listFolder = GetSubDirectories(folderRoot);
+            listFolder.Add(folderRoot);
             if (listFolder.Count == 0)
             {
                 MessageBox.Show("Folder Input khong chua Folder con can xu li", "Warning!");
@@ -157,67 +182,6 @@ namespace CrawlerData
                 LoadSubDirs(subdirectory, ref listFolder);
                 listFolder.Add(subdirectory);
             }
-        }
-
-        string ReadTextFromUrl(string url)
-        {
-            try
-            {
-                // WebClient is still convenient
-                // Assume UTF8, but detect BOM - could also honor response charset I suppose
-                using (var client = new WebClient())
-                using (var stream = client.OpenRead(url))
-                using (var textReader = new StreamReader(stream, Encoding.UTF8, true))
-                {
-                    return textReader.ReadToEnd();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("ReadTextFromUrl: " + ex.ToString());
-                return null;
-            }       
-        }
-
-        public string GetContentNews(string data)
-        {
-            string result = String.Empty;
-            //result = data;
-            try
-            {
-                Regex regex = new Regex(textBox2.Text);
-                MatchCollection matches = regex.Matches(data);
-                if (matches.Count > 0)
-                {
-                    foreach (Match match in matches)
-                    {
-                        if (match.Success)
-                        {
-                            result += match.Value.ToString() + Environment.NewLine;
-                            //result = result.Replace(match.Value.ToString(), String.Empty);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("GetContentNews: " + ex.ToString());
-                return null;
-            }
-            return result;
-        }
-
-        private string GetPlainTextFromHtml(string htmlString)
-        {
-            string htmlTagPattern = "<.*?>";
-            var regexCss = new Regex("(\\<script(.+?)\\</script\\>)|(\\<style(.+?)\\</style\\>)",
-                RegexOptions.Singleline | RegexOptions.IgnoreCase);
-            htmlString = regexCss.Replace(htmlString, string.Empty);
-            htmlString = Regex.Replace(htmlString, htmlTagPattern, string.Empty);
-            htmlString = Regex.Replace(htmlString, @"^\s+$[\r\n]*", "", RegexOptions.Multiline);
-            htmlString = htmlString.Replace("&nbsp;", string.Empty);
-
-            return htmlString;
         }
     }
 }

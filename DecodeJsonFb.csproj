@@ -7,7 +7,7 @@
     <ProjectGuid>{CD4B337A-D799-4275-8071-C740BC2765BE}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>CrawlerData</RootNamespace>
-    <AssemblyName>CrawlerData</AssemblyName>
+    <AssemblyName>DecodeJsonFb</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
