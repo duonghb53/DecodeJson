@@ -10,4 +10,3 @@ G:\Study\GitHub\DecodeJson\obj\Debug\DecodeJsonFb.csproj.CoreCompileInputs.cache
 G:\Study\GitHub\DecodeJson\obj\Debug\DecodeJsonFb.csproj.CopyComplete
 G:\Study\GitHub\DecodeJson\obj\Debug\DecodeJsonFb.exe
 G:\Study\GitHub\DecodeJson\obj\Debug\DecodeJsonFb.pdb
-G:\Study\GitHub\DecodeJson\obj\Debug\DecodeJsonFb.csprojAssemblyReference.cache
