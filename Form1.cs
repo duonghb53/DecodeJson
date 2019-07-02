@@ -31,12 +31,8 @@ namespace CrawlerData
             textBox1.Text = String.Empty;
             try
             {
-                List<string> dataContent = new List<string>();
-                var data = new List<infoChat>();
-
                 List<string> listFile = GetAllFileJson(textBox2.Text);
                 string folderRoot = System.IO.Directory.GetCurrentDirectory();
-
                 string folderOutput = System.IO.Path.Combine(folderRoot, "Output");
 
                 if (!System.IO.Directory.Exists(folderOutput))
@@ -47,6 +43,8 @@ namespace CrawlerData
 
                 foreach (string fileJson in listFile)
                 {
+                    List<string> dataContent = new List<string>();
+                    var dataRaw = new List<infoChat>();
                     string folder = Path.GetDirectoryName(fileJson);
                     var dirName = folder.Split('\\').Last();
 
@@ -61,7 +59,7 @@ namespace CrawlerData
                             if (chat.content == null) continue;
                             info.sender_name = chat.sender_name.ToString();
                             info.content = chat.content.ToString();
-                            data.Add(info);
+                            dataRaw.Add(info);
                         }
                         r.Close();
                     }
@@ -69,35 +67,38 @@ namespace CrawlerData
                     //Decode
                     string senderPrev = string.Empty;
                     string content = string.Empty;
-                    bool flag = false;
-                    foreach (infoChat line in data)
+                    bool iv = false;
+
+                    for(int i = dataRaw.Count - 1; i > 0; i-- )
                     {
-                        string sender_name = DecodeString(line.sender_name);
-                        if (sender_name.Equals(senderPrev))
+                        string cur_name = DecodeString(dataRaw[i].sender_name);
+                        string next_name = DecodeString(dataRaw[i - 1].sender_name);
+                        dataRaw[i].content = dataRaw[i].content.Replace("\\", "");
+                        if (!iv)
                         {
-                            content += " " + DecodeString(line.content);
-                            senderPrev = sender_name;
-                            flag = true;
+                            content = DecodeString(dataRaw[i].content);
+                        }
+                        if (cur_name.Equals(next_name))
+                        {
+                            content += " " + DecodeString(dataRaw[i - 1].content);
+                            iv = true;
                             continue;
                         }
                         else
                         {
-                            if (flag)
-                            {
-                                dataContent.Add(content);
-                                flag = false;
-                            }
-                            content = DecodeString(line.content);
-                            senderPrev = sender_name;
+                            dataContent.Add(content);
+                            iv = false;
                         }
+                        
                     }
+
                     string fileOut = folderOutput + "\\" + dirName + ".txt";
                     //FileStream fs = new FileStream(fileOut, FileMode.Create);//Tạo file mới tên là test.txt 
                     using (StreamWriter output = new StreamWriter(fileOut))
                     {
-                        for (int i = dataContent.Count - 1; i >= 0; i--)
+                        foreach (string str in dataContent)
                         {
-                            output.WriteLine(dataContent[i]);
+                            output.WriteLine(str);
                         }
                         output.Close();
                     }

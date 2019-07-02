@@ -3,7 +3,6 @@ G:\Study\GitHub\DecodeJson\bin\Debug\DecodeJsonFb.exe
 G:\Study\GitHub\DecodeJson\bin\Debug\DecodeJsonFb.pdb
 G:\Study\GitHub\DecodeJson\bin\Debug\Newtonsoft.Json.dll
 G:\Study\GitHub\DecodeJson\bin\Debug\Newtonsoft.Json.xml
-G:\Study\GitHub\DecodeJson\obj\Debug\DecodeJsonFb.csprojAssemblyReference.cache
 G:\Study\GitHub\DecodeJson\obj\Debug\CrawlerData.Form1.resources
 G:\Study\GitHub\DecodeJson\obj\Debug\CrawlerData.Properties.Resources.resources
 G:\Study\GitHub\DecodeJson\obj\Debug\DecodeJsonFb.csproj.GenerateResource.cache
