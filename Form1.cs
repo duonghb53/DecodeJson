@@ -71,9 +71,9 @@ namespace CrawlerData
 
                     for(int i = dataRaw.Count - 1; i > 0; i-- )
                     {
+                        //dataRaw[i].content = dataRaw[i].content.Replace("\\", "");
                         string cur_name = DecodeString(dataRaw[i].sender_name);
                         string next_name = DecodeString(dataRaw[i - 1].sender_name);
-                        dataRaw[i].content = dataRaw[i].content.Replace("\\", "");
                         if (!iv)
                         {
                             content = DecodeString(dataRaw[i].content);
@@ -128,9 +128,17 @@ namespace CrawlerData
 
         private string DecodeString(string text)
         {
-            Encoding targetEncoding = Encoding.GetEncoding("ISO-8859-1");
-            var unescapeText = System.Text.RegularExpressions.Regex.Unescape(text);
-            return Encoding.UTF8.GetString(targetEncoding.GetBytes(unescapeText));
+            try
+            {
+                Encoding targetEncoding = Encoding.GetEncoding("ISO-8859-1");
+                var unescapeText = System.Text.RegularExpressions.Regex.Unescape(text);
+                return Encoding.UTF8.GetString(targetEncoding.GetBytes(unescapeText));
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
+
         }
 
         private List<string> GetAllFileJson(string folderRoot)
