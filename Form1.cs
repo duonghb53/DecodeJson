@@ -29,6 +29,8 @@ namespace CrawlerData
         private void button1_Click(object sender, EventArgs e)
         {
             textBox1.Text = String.Empty;
+            //MessageBox.Show(textBox2.Text);
+
             try
             {
                 List<string> listFile = GetAllFileJson(textBox2.Text);
@@ -69,9 +71,12 @@ namespace CrawlerData
                     string content = string.Empty;
                     bool iv = false;
 
-                    for(int i = dataRaw.Count - 1; i > 0; i-- )
-                    {
-                        //dataRaw[i].content = dataRaw[i].content.Replace("\\", "");
+                    for (int i = dataRaw.Count - 1; i > 0; i--)
+                    { 
+                        dataRaw[i].content = dataRaw[i].content.Replace("\\\\", "");
+                        dataRaw[i].content = dataRaw[i].content.Replace("\\", "");
+                        dataRaw[i - 1].content = dataRaw[i - 1].content.Replace("\\\\", "");
+                        dataRaw[i - 1].content = dataRaw[i - 1].content.Replace("\\", "");                    
                         string cur_name = DecodeString(dataRaw[i].sender_name);
                         string next_name = DecodeString(dataRaw[i - 1].sender_name);
                         if (!iv)
@@ -89,11 +94,9 @@ namespace CrawlerData
                             dataContent.Add(content);
                             iv = false;
                         }
-                        
                     }
 
                     string fileOut = folderOutput + "\\" + dirName + ".txt";
-                    //FileStream fs = new FileStream(fileOut, FileMode.Create);//Tạo file mới tên là test.txt 
                     using (StreamWriter output = new StreamWriter(fileOut))
                     {
                         foreach (string str in dataContent)
@@ -128,16 +131,16 @@ namespace CrawlerData
 
         private string DecodeString(string text)
         {
-            try
-            {
+            //try
+            //{
                 Encoding targetEncoding = Encoding.GetEncoding("ISO-8859-1");
                 var unescapeText = System.Text.RegularExpressions.Regex.Unescape(text);
                 return Encoding.UTF8.GetString(targetEncoding.GetBytes(unescapeText));
-            }
-            catch (Exception ex)
-            {
-                return string.Empty;
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    return string.Empty;
+            //}
 
         }
 
