@@ -29,8 +29,6 @@ namespace CrawlerData
         private void button1_Click(object sender, EventArgs e)
         {
             textBox1.Text = String.Empty;
-            //MessageBox.Show(textBox2.Text);
-
             try
             {
                 List<string> listFile = GetAllFileJson(textBox2.Text);
@@ -131,17 +129,9 @@ namespace CrawlerData
 
         private string DecodeString(string text)
         {
-            //try
-            //{
-                Encoding targetEncoding = Encoding.GetEncoding("ISO-8859-1");
-                var unescapeText = System.Text.RegularExpressions.Regex.Unescape(text);
-                return Encoding.UTF8.GetString(targetEncoding.GetBytes(unescapeText));
-            //}
-            //catch (Exception ex)
-            //{
-            //    return string.Empty;
-            //}
-
+            Encoding targetEncoding = Encoding.GetEncoding("ISO-8859-1");
+            var unescapeText = System.Text.RegularExpressions.Regex.Unescape(text);
+            return Encoding.UTF8.GetString(targetEncoding.GetBytes(unescapeText));
         }
 
         private List<string> GetAllFileJson(string folderRoot)
